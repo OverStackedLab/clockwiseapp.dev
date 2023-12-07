@@ -9,11 +9,11 @@ import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
+import Typography, { TypographyTypeMap } from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-function Copyright(props: any) {
+function Copyright(props: TypographyTypeMap) {
   return (
     <Typography
       variant="body2"
@@ -22,7 +22,7 @@ function Copyright(props: any) {
       {...props}
     >
       {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
+      <Link color="inherit" href="https://clockwiseapp.dev/">
         ClockWise
       </Link>{" "}
       {new Date().getFullYear()}
@@ -31,7 +31,6 @@ function Copyright(props: any) {
   );
 }
 
-// TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
 export default function SignIn() {
@@ -50,10 +49,12 @@ export default function SignIn() {
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
             display: "flex",
             flexDirection: "column",
+            justifyContent: "center",
             alignItems: "center",
+            height: "100%",
+            paddingBottom: 30,
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
