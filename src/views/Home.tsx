@@ -53,7 +53,7 @@ export default function SignIn() {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            height: "100%",
+            height: "calc(100vh - 100px)",
             paddingBottom: 30,
           }}
         >
