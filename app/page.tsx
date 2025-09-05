@@ -16,11 +16,11 @@ export default function Page() {
           <p
             className={`${lusitana.className} text-xl text-gray-800 md:text-3xl md:leading-normal`}
           >
-            <strong>Welcome to Acme.</strong> This is the example for the{" "}
-            <a href="https://nextjs.org/learn/" className="text-blue-500">
-              Next.js Learn Course
+            <strong>Welcome to ClockWise.</strong> make time and task management
+            across time zones simple and stress-free. Brought to you by{" "}
+            <a href="https://overstacked.dev/" className="text-blue-500">
+              OverStacked.
             </a>
-            , brought to you by Vercel.
           </p>
           <Link
             href="/login"
