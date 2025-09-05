@@ -1,10 +1,11 @@
-import Image from 'next/image';
-import { lusitana } from '@/app/ui/fonts';
-import Search from '@/app/ui/search';
+import Image from "next/image";
+import { lusitana } from "@/app/ui/fonts";
+import Search from "@/app/ui/search";
 import {
   CustomersTableType,
   FormattedCustomersTable,
-} from '@/app/lib/definitions';
+} from "@/app/lib/definitions";
+import { Suspense } from "react";
 
 export default async function CustomersTable({
   customers,
@@ -16,7 +17,9 @@ export default async function CustomersTable({
       <h1 className={`${lusitana.className} mb-8 text-xl md:text-2xl`}>
         Customers
       </h1>
-      <Search placeholder="Search customers..." />
+      <Suspense>
+        <Search placeholder="Search customers..." />
+      </Suspense>
       <div className="mt-6 flow-root">
         <div className="overflow-x-auto">
           <div className="inline-block min-w-full align-middle">
