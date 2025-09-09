@@ -1,4 +1,4 @@
-# Acme Dashboard
+# ClockWise
 
 A full-stack invoice management dashboard built with Next.js 15, featuring authentication, CRUD operations, and real-time data visualization.
 
