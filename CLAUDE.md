@@ -4,47 +4,43 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a Next.js 15 App Router dashboard application built from the Next.js Learn Course starter template. It demonstrates a full-stack invoice management system with PostgreSQL database integration.
+ClockWise is a client-only world-clock app: an interactive world map for selecting
+time zones and a card grid that shows — and sets — the time in each. Built with
+Vite 6, React 18, and TypeScript. No server, no database, no auth, no environment
+variables.
 
 ## Development Commands
 
-- `pnpm dev` - Start development server with Turbopack
-- `pnpm build` - Build production bundle
-- `pnpm start` - Start production server
+- `pnpm dev` - Start Vite dev server (http://localhost:5173)
+- `pnpm build` - Type-check (`tsc -b`) and build production bundle to `dist/`
+- `pnpm preview` - Serve the production build
 
-No test framework is currently configured.
+No test framework is currently configured. `src/lib/time.ts` is pure and the
+recommended place to start if tests are added.
 
 ## Architecture
 
-### Database Layer
-- Uses `postgres` package for direct SQL queries (not an ORM)
-- Database connection configured via `POSTGRES_URL` environment variable with SSL required
-- Main entities: Users, Customers, Invoices, Revenue
-- Database seeding available via `/seed` API route
+### State (`src/App.tsx`)
+- `selected` - ordered list of city ids; the first entry is the **anchor** zone
+- `instant` - the single `Date` every card renders from
+- `live` - when true, `instant` follows the wall clock (1s interval); setting a
+  time via card input or scrubber sets `live` to false; "Now" re-enables it
 
-### Data Layer (`app/lib/`)
-- `definitions.ts` - TypeScript interfaces for all data models
-- `data.ts` - Database query functions using postgres package
-- `utils.ts` - Utility functions for currency formatting, date formatting, pagination
-- `placeholder-data.ts` - Seed data for development
+### Time math (`src/lib/time.ts`)
+- Pure helpers built on `Intl.DateTimeFormat` with real IANA zones — no date library
+- `parts()` formats an instant in a zone; `offsetMs()` derives the UTC offset;
+  `wallToInstant()` inverts wall-clock time to an instant (two passes settle DST)
+- `subsolarPoint()` feeds the map's day/night terminator
 
-### UI Architecture (`app/ui/`)
-- Component-based structure organized by feature:
-  - `dashboard/` - Dashboard-specific components (cards, charts, navigation)
-  - `invoices/` - Invoice management components (forms, tables, status)
-  - `customers/` - Customer-related components
-- Uses Tailwind CSS for styling with custom global styles in `global.css`
-- Heroicons for iconography
+### Map (`src/components/WorldMap.tsx`)
+- `d3-geo` Natural Earth projection rendered as JSX SVG
+- Country geometry fetched at runtime from jsDelivr (`world-atlas` 110m topojson)
+- Terminator recomputed once per minute (memoized on minute key)
+
+### Data (`src/data/cities.ts`)
+- 34 cities with id, display name, country, IANA zone, lat/lon
 
 ### Key Patterns
-- Server Components by default (Next.js App Router)
-- Direct SQL queries with postgres package, no ORM
-- TypeScript path mapping with `@/*` for imports
-- Pagination with 6 items per page constant
-- Currency stored as cents in database, formatted for display
-
-### Environment Requirements
-- `POSTGRES_URL` - PostgreSQL connection string (required, must use SSL)
-
-### Authentication
-Uses NextAuth v5 beta - authentication files not present in current codebase snapshot.
+- `@/*` path alias → `./src/*` (tsconfig + vite.config)
+- All styling in `src/styles/app.css` — CSS custom properties, no framework
+- TypeScript strict mode; `pnpm build` runs the type-check
