@@ -62,7 +62,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
 
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));gap:14px}
 .card{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:13px;
-  padding:18px 18px 16px;overflow:hidden}
+  padding:18px 44px 16px 18px;overflow:hidden}
 .card.anchor{border-color:var(--amber-dim)}
 .card .badge{position:absolute;top:0;left:0;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;
   color:var(--ink);background:var(--amber);padding:3px 9px;border-radius:0 0 8px 0}
@@ -74,12 +74,13 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
 .card .x{position:absolute;top:12px;right:12px;border:0;padding:4px 6px;font-size:15px;
   line-height:1;color:var(--faint);border-radius:6px}
 .card .x:hover{color:var(--text);background:#1b2431}
-.card .grip{position:absolute;top:38px;right:12px;border:0;padding:5px 6px;font-size:17px;
+.card .grip{position:absolute;top:38px;right:12px;bottom:16px;width:24px;border:0;padding:0;
+  display:flex;align-items:center;justify-content:center;font-size:17px;
   line-height:1;color:var(--faint);border-radius:6px;cursor:grab}
 .card .grip:active{cursor:grabbing}
 .card .grip:hover{color:var(--text);background:#1b2431}
 .card.dragging{opacity:.45;border-style:dashed}
-.city{font-size:15.5px;font-weight:500;margin:8px 0 2px;padding-right:28px}
+.city{font-size:15.5px;font-weight:500;margin:8px 0 2px}
 .meta{font-size:11.5px;color:var(--faint);letter-spacing:.05em;font-family:'IBM Plex Mono',monospace}
 .time{font-family:'IBM Plex Mono',monospace;font-weight:300;font-size:44px;letter-spacing:.01em;
   margin:14px 0 2px;line-height:1}
