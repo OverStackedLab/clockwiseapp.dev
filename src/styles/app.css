@@ -66,9 +66,19 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
 .card.anchor{border-color:var(--amber-dim)}
 .card .badge{position:absolute;top:0;left:0;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;
   color:var(--ink);background:var(--amber);padding:3px 9px;border-radius:0 0 8px 0}
+.card .setanchor{position:absolute;top:0;left:0;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--faint);background:transparent;border:0;border-radius:0 0 8px 0;padding:3px 9px;
+  opacity:0;transition:.15s}
+.card:hover .setanchor,.card .setanchor:focus-visible{opacity:1}
+.card .setanchor:hover{color:var(--ink);background:var(--amber)}
 .card .x{position:absolute;top:12px;right:12px;border:0;padding:4px 6px;font-size:15px;
   line-height:1;color:var(--faint);border-radius:6px}
 .card .x:hover{color:var(--text);background:#1b2431}
+.card .grip{position:absolute;top:38px;right:12px;border:0;padding:5px 6px;font-size:17px;
+  line-height:1;color:var(--faint);border-radius:6px;cursor:grab}
+.card .grip:active{cursor:grabbing}
+.card .grip:hover{color:var(--text);background:#1b2431}
+.card.dragging{opacity:.45;border-style:dashed}
 .city{font-size:15.5px;font-weight:500;margin:8px 0 2px;padding-right:28px}
 .meta{font-size:11.5px;color:var(--faint);letter-spacing:.05em;font-family:'IBM Plex Mono',monospace}
 .time{font-family:'IBM Plex Mono',monospace;font-weight:300;font-size:44px;letter-spacing:.01em;
@@ -83,7 +93,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
 .setrow input[type=time]{background:#0e141b;border:1px solid var(--line);border-radius:8px;
   padding:7px 9px;color:var(--text);width:100%}
 .setrow input[type=time]:focus{border-color:var(--amber-dim)}
-.daybar{display:flex;height:4px;margin-top:14px;border-radius:2px;overflow:hidden;background:#0d1319}
+.daybar{display:flex;height:4px;margin:14px 0 8px;border-radius:2px;overflow:hidden;background:#0d1319}
 .empty{grid-column:1/-1;border:1px dashed var(--line);border-radius:13px;padding:44px;
   text-align:center;color:var(--faint);font-size:13.5px}
 .sechead{display:flex;align-items:baseline;gap:14px;margin:34px 0 14px}

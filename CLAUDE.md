@@ -21,10 +21,11 @@ recommended place to start if tests are added.
 ## Architecture
 
 ### State (`src/App.tsx`)
-- `selected` - ordered list of city ids; the first entry is the **anchor** zone
+- `selected` - ordered list of city ids; the first entry is the **anchor** zone;
+  cards drag-reorder the list, and "Set anchor" promotes a card to the front
 - `instant` - the single `Date` every card renders from
 - `live` - when true, `instant` follows the wall clock (1s interval); setting a
-  time via card input or scrubber sets `live` to false; "Now" re-enables it
+  time via the scrubber sets `live` to false; "Now" re-enables it
 
 ### Time math (`src/lib/time.ts`)
 - Pure helpers built on `Intl.DateTimeFormat` with real IANA zones — no date library

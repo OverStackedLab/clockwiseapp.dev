@@ -8,9 +8,11 @@ world map, set one time, and read it in every selected zone.
 - **World map zone selector**: Natural Earth map rendered as SVG with clickable city
   markers and a live day/night terminator
 - **Zone cards**: Per-city time, DST-correct UTC offset, zone abbreviation, offset
-  versus the anchor zone, and a 24-hour day strip
-- **Set any time**: A time input on each card (or the scrubber) re-anchors every zone
-  to the same instant — "if it's 3 PM in Berlin, what is it in Tokyo?"
+  versus the anchor zone, and a 24-hour day strip; drag the grip to reorder cards
+- **Anchor zone**: The first card is the anchor all deltas are measured against —
+  drag a card to the front or click **Set anchor** on it to switch
+- **Set any time**: The scrubber sets the anchor zone's wall-clock time and every
+  card follows — "if it's 3 PM in Berlin, what is it in Tokyo?"
 - **Live mode**: "Now" snaps everything back to the current time, ticking every second
 - **Real IANA time zones**: All timezone math is `Intl.DateTimeFormat` — no date
   library, DST handled by the browser
@@ -44,7 +46,7 @@ src/
 ├── App.tsx                    state: selected zones / instant / live
 ├── components/
 │   ├── WorldMap.tsx           SVG map, markers, day-night terminator
-│   ├── ZoneCard.tsx           per-zone card + time input
+│   ├── ZoneCard.tsx           per-zone card: reorder grip, set-anchor
 │   └── DayBar.tsx             24-hour strip
 ├── lib/time.ts                Intl timezone helpers (pure, unit-testable)
 ├── data/cities.ts             34 cities with IANA zones
