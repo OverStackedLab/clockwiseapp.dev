@@ -32,6 +32,17 @@ function useWorld(): string[] {
   return paths;
 }
 
+function useIsMobile(): boolean {
+  const [mobile, setMobile] = useState(() => window.matchMedia('(max-width: 640px)').matches);
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 640px)');
+    const onChange = (e: MediaQueryListEvent) => setMobile(e.matches);
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, []);
+  return mobile;
+}
+
 type Props = {
   instant: Date;
   selected: string[];
@@ -40,6 +51,7 @@ type Props = {
 
 export default function WorldMap({ instant, selected, onToggle }: Props) {
   const land = useWorld();
+  const isMobile = useIsMobile();
   const box = useRef<HTMLDivElement>(null);
   const [tip, setTip] = useState<{ x: number; y: number; city: string; t: string } | null>(null);
 
@@ -52,10 +64,12 @@ export default function WorldMap({ instant, selected, onToggle }: Props) {
 
   return (
     <div className="mapcard" ref={box}>
-      <div className="maphead">
-        <div className="k">Zone selector</div>
-        <div className="v">Click a marker to add or remove a city</div>
-      </div>
+      {!isMobile && (
+        <div className="maphead">
+          <div className="k">Zone selector</div>
+          <div className="v">Click a marker to add or remove a city</div>
+        </div>
+      )}
 
       <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label="World map for selecting time zones">
         <path d={GRAT} fill="none" stroke="#151d26" strokeWidth={0.6} />
@@ -74,12 +88,12 @@ export default function WorldMap({ instant, selected, onToggle }: Props) {
               <g
                 key={c.id}
                 transform={`translate(${x.toFixed(1)},${y.toFixed(1)})`}
-                style={{ cursor: 'pointer' }}
-                role="button"
-                aria-pressed={on}
-                aria-label={`${on ? 'Remove' : 'Add'} ${c.city}`}
-                onClick={() => onToggle(c.id)}
-                onMouseMove={(e) => {
+                style={isMobile ? { pointerEvents: 'none' } : { cursor: 'pointer' }}
+                role={isMobile ? undefined : 'button'}
+                aria-pressed={isMobile ? undefined : on}
+                aria-label={isMobile ? undefined : `${on ? 'Remove' : 'Add'} ${c.city}`}
+                onClick={isMobile ? undefined : () => onToggle(c.id)}
+                onMouseMove={isMobile ? undefined : (e) => {
                   const r = box.current?.getBoundingClientRect();
                   if (!r) return;
                   const p = parts(instant, c.tz);
@@ -90,7 +104,7 @@ export default function WorldMap({ instant, selected, onToggle }: Props) {
                     t: `${p.hour}:${p.minute}`,
                   });
                 }}
-                onMouseLeave={() => setTip(null)}
+                onMouseLeave={isMobile ? undefined : () => setTip(null)}
               >
                 <circle r={12} fill="transparent" />
                 {on && <circle r={9} fill="none" stroke="var(--amber)" strokeWidth={1} opacity={0.5} />}
