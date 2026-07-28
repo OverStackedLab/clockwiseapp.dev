@@ -104,7 +104,6 @@ export default function WorldMap({ instant, selected, onToggle }: Props) {
       <div className="legend">
         <span><i style={{ background: 'var(--amber)' }} />Selected</span>
         <span><i style={{ background: '#46586a' }} />Available</span>
-        <span><i style={{ background: '#0a0d11', border: '1px solid #1e2833' }} />Night</span>
       </div>
 
       {tip && (
