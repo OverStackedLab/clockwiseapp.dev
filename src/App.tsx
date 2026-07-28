@@ -30,6 +30,24 @@ export default function App() {
     setSelected((s) => (s.includes(id) ? s.filter((x) => x !== id) : [...s, id]));
   }, []);
 
+  const [dragId, setDragId] = useState<string | null>(null);
+
+  const makeAnchor = useCallback((id: string) => {
+    setSelected((s) => (s[0] === id ? s : [id, ...s.filter((x) => x !== id)]));
+  }, []);
+
+  const moveBefore = useCallback((dragged: string, over: string) => {
+    setSelected((s) => {
+      const from = s.indexOf(dragged);
+      const to = s.indexOf(over);
+      if (from < 0 || to < 0 || from === to) return s;
+      const next = s.slice();
+      next.splice(from, 1);
+      next.splice(to, 0, dragged);
+      return next;
+    });
+  }, []);
+
   const anchor = selected.length ? byId[selected[0]] : null;
   const anchorOffset = anchor ? offsetMs(instant, anchor.tz) : 0;
   const ap = anchor ? parts(instant, anchor.tz) : null;
@@ -120,8 +138,12 @@ export default function App() {
               instant={instant}
               anchorOffset={anchorOffset}
               isAnchor={i === 0}
+              dragging={dragId === id}
               onRemove={() => toggle(id)}
-              onSetTime={setMoment}
+              onMakeAnchor={() => makeAnchor(id)}
+              onDragStart={() => setDragId(id)}
+              onDragEnd={() => setDragId(null)}
+              onDragOver={() => { if (dragId && dragId !== id) moveBefore(dragId, id); }}
             />
           ))
         )}
