@@ -148,6 +148,13 @@ export default function App() {
           ))
         )}
       </div>
+
+      <footer>
+        © 2026 · Built by{' '}
+        <a href="https://www.overstacked.dev/" target="_blank" rel="noopener noreferrer">
+          OverStacked
+        </a>
+      </footer>
     </div>
   );
 }
