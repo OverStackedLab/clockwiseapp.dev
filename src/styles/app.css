@@ -15,11 +15,9 @@ a:hover{color:#f6d68c}
 header{display:flex;align-items:baseline;justify-content:space-between;gap:24px;
   padding:28px 0 22px;border-bottom:1px solid var(--line);margin-bottom:28px}
 .brand{display:flex;align-items:center;gap:14px}
-.mark{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--amber);position:relative}
-.mark::before,.mark::after{content:"";position:absolute;background:var(--amber);border-radius:2px;
-  left:50%;bottom:50%;transform-origin:bottom center}
-.mark::before{width:1.5px;height:8px;transform:translateX(-50%) rotate(38deg)}
-.mark::after{width:1.5px;height:6px;transform:translateX(-50%) rotate(-70deg)}
+.mark{width:28px;height:28px;background:var(--amber);
+  -webkit-mask:url(/brand/mark.png) center/contain no-repeat;
+  mask:url(/brand/mark.png) center/contain no-repeat}
 h1{font-size:21px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;margin:0}
 .tag{font-size:12.5px;color:var(--faint);letter-spacing:.06em}
 .utcbox{text-align:right}

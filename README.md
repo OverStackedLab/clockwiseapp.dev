@@ -1,4 +1,10 @@
-# ClockWise
+<p align="center">
+  <img src="public/brand/mark.png" alt="ClockWise" width="96" height="96" />
+</p>
+
+<h1 align="center">ClockWise</h1>
+
+<p align="center">Pick zones on the map · set one time · read them all</p>
 
 A world clock for people who work across time zones. Pick cities on an interactive
 world map, set one time, and read it in every selected zone.
@@ -36,10 +42,29 @@ pnpm build      # type-check + production build to dist/
 pnpm preview    # serve the production build
 ```
 
+## Branding
+
+The mark is a networked globe — the same idea as the app: one world, many points
+on it kept in sync. It is drawn in the app's amber (`--amber`, `#e9b84f`) on the
+ink background (`--ink`, `#0c0f12`).
+
+| Asset | Use |
+| --- | --- |
+| `public/favicon.ico` (16/32/48) | browser tab |
+| `public/favicon-16.png`, `favicon-32.png` | modern PNG favicons |
+| `public/apple-touch-icon.png` (180) | iOS home screen |
+| `public/icon-512.png` | manifest icon + social card |
+| `public/brand/mark.png` (128) | header mark, README |
+| `public/brand/mark-amber.png`, `mark-mono.png` (512) | full-size amber / white marks on transparent |
+
+The header mark is the PNG applied as a CSS mask (`.mark` in `src/styles/app.css`),
+so it takes its color from `--amber` and re-tints with the palette.
+
 ## Project Structure
 
 ```
 index.html                     entry + font links + meta
+public/                        favicons, manifest, brand marks
 vite.config.ts                 react plugin, @ → src alias
 src/
 ├── main.tsx                   createRoot
