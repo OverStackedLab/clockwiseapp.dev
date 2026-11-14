@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import WorldMap from '@/components/WorldMap';
 import ZoneCard from '@/components/ZoneCard';
+import ConsentBanner from '@/components/ConsentBanner';
+import { acceptAnalytics, declineAnalytics, getConsent } from '@/lib/consent';
 import { CITIES, byId } from '@/data/cities';
 import {
   HOUR_FORMAT, clockLabel, offsetMs, pad, parts, wallToInstant, zoneAbbr,
@@ -25,6 +27,8 @@ export default function App() {
   const [live, setLive] = useState(true);
   const [utc, setUtc] = useState(() => parts(new Date(), 'UTC'));
   const [hourFormat, setHourFormat] = useState<HourFormat>(loadHourFormat);
+  const [consentOpen, setConsentOpen] = useState(() => getConsent() === null);
+  const [consentReopened, setConsentReopened] = useState(false);
 
   useEffect(() => {
     try {
@@ -189,7 +193,23 @@ export default function App() {
         <a href="https://www.overstacked.dev/" target="_blank" rel="noopener noreferrer">
           OverStacked
         </a>
+        <span className="sep">·</span>
+        <a href="/privacy.html">Privacy</a>
+        <span className="sep">·</span>
+        <button
+          type="button"
+          className="linkbtn"
+          onClick={() => { setConsentReopened(true); setConsentOpen(true); }}
+        >Cookie settings</button>
       </footer>
+
+      {consentOpen && (
+        <ConsentBanner
+          autoFocus={consentReopened}
+          onAccept={() => { acceptAnalytics(); setConsentOpen(false); }}
+          onDecline={() => { declineAnalytics(); setConsentOpen(false); }}
+        />
+      )}
     </div>
   );
 }
