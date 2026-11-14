@@ -42,6 +42,26 @@ export function wallToInstant(
 
 export const pad = (n: number | string) => String(n).padStart(2, '0');
 
+/** Clock display format. The app holds the current choice in state (Time format control); this is the default. */
+export type HourFormat = '12h' | '24h';
+export const HOUR_FORMAT: HourFormat = '12h';
+
+/** Shared clock formatter: `time` is "hh:mm"; `suffix` is "AM"/"PM" in 12h mode, "" in 24h. */
+export function formatClock(
+  p: Pick<Parts, 'hour' | 'minute'>,
+  format: HourFormat = HOUR_FORMAT,
+): { time: string; suffix: string } {
+  const h = +p.hour;
+  if (format === '24h') return { time: `${pad(h)}:${p.minute}`, suffix: '' };
+  return { time: `${pad(((h + 11) % 12) + 1)}:${p.minute}`, suffix: h < 12 ? 'AM' : 'PM' };
+}
+
+/** One-line clock label, e.g. "02:30 PM" (12h) or "14:30" (24h). */
+export function clockLabel(p: Pick<Parts, 'hour' | 'minute'>, format: HourFormat = HOUR_FORMAT): string {
+  const { time, suffix } = formatClock(p, format);
+  return suffix ? `${time} ${suffix}` : time;
+}
+
 export function offsetLabel(date: Date, tz: string): string {
   const m = offsetMs(date, tz) / 60000;
   const a = Math.abs(m);

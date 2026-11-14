@@ -7,7 +7,6 @@ import { parts, subsolarPoint } from '@/lib/time';
 
 const W = 1200;
 const H = 560;
-const WORLD_URL = 'https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json';
 
 const projection = geoNaturalEarth1().scale(215).translate([W / 2, H / 2 + 14]);
 const path = geoPath(projection);
@@ -18,8 +17,9 @@ function useWorld(): string[] {
   const [paths, setPaths] = useState<string[]>([]);
   useEffect(() => {
     let ok = true;
-    fetch(WORLD_URL)
-      .then((r) => r.json())
+    // Bundled locally (world-atlas@2.0.2) so no third-party CDN sees visitor IPs.
+    import('world-atlas/countries-110m.json')
+      .then((m) => m.default)
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .then((topo: any) => {
         if (!ok) return;

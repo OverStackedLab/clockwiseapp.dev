@@ -1,12 +1,15 @@
 import { useState } from 'react';
 import DayBar from '@/components/DayBar';
 import type { City } from '@/data/cities';
-import { fmtHours, offsetLabel, offsetMs, pad, parts, zoneAbbr } from '@/lib/time';
+import {
+  fmtHours, formatClock, offsetLabel, offsetMs, parts, zoneAbbr, type HourFormat,
+} from '@/lib/time';
 
 type Props = {
   city: City;
   instant: Date;
   anchorOffset: number;
+  hourFormat: HourFormat;
   isAnchor: boolean;
   dragging: boolean;
   onRemove: () => void;
@@ -17,7 +20,7 @@ type Props = {
 };
 
 export default function ZoneCard({
-  city, instant, anchorOffset, isAnchor, dragging,
+  city, instant, anchorOffset, hourFormat, isAnchor, dragging,
   onRemove, onMakeAnchor, onDragStart, onDragEnd, onDragOver,
 }: Props) {
   // draggable only while the grip is held, so text selection and the
@@ -25,7 +28,7 @@ export default function ZoneCard({
   const [grabbed, setGrabbed] = useState(false);
   const p = parts(instant, city.tz);
   const h = +p.hour;
-  const h12 = ((h + 11) % 12) + 1;
+  const clock = formatClock(p, hourFormat);
   const dh = (offsetMs(instant, city.tz) - anchorOffset) / 3600000;
 
   return (
@@ -49,18 +52,24 @@ export default function ZoneCard({
       <button
         className="grip"
         title={`Drag to reorder ${city.city}`}
+        aria-label={`Drag to reorder ${city.city}`}
         onMouseDown={() => setGrabbed(true)}
         onMouseUp={() => setGrabbed(false)}
         onBlur={() => setGrabbed(false)}
       >⠿</button>
-      <button className="x" title={`Remove ${city.city}`} onClick={onRemove}>×</button>
+      <button
+        className="x"
+        title={`Remove ${city.city}`}
+        aria-label={`Remove ${city.city}`}
+        onClick={onRemove}
+      >×</button>
       <div className="city">{city.city}</div>
       <div className="meta">
         {zoneAbbr(instant, city.tz)} · {offsetLabel(instant, city.tz)} · {city.cc}
       </div>
       <div className="time">
-        {pad(h12)}:{p.minute}
-        <span className="ap">{h < 12 ? 'AM' : 'PM'}</span>
+        {clock.time}
+        {clock.suffix && <span className="ap">{clock.suffix}</span>}
       </div>
       <div className="sub">
         <span>{p.weekday} {p.month}/{p.day}</span>

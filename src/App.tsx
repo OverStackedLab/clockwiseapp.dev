@@ -1,16 +1,42 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import WorldMap from '@/components/WorldMap';
 import ZoneCard from '@/components/ZoneCard';
+import ConsentBanner from '@/components/ConsentBanner';
+import { acceptAnalytics, declineAnalytics, getConsent } from '@/lib/consent';
 import { CITIES, byId } from '@/data/cities';
-import { offsetMs, pad, parts, wallToInstant, zoneAbbr } from '@/lib/time';
+import {
+  HOUR_FORMAT, clockLabel, offsetMs, pad, parts, wallToInstant, zoneAbbr,
+  type HourFormat,
+} from '@/lib/time';
 
 const DEFAULT_ZONES = ['sfo', 'nyc', 'lon', 'ber', 'blr', 'tyo'];
+const HOUR_FORMAT_KEY = 'clockwise.hourFormat';
+
+function loadHourFormat(): HourFormat {
+  try {
+    const v = localStorage.getItem(HOUR_FORMAT_KEY);
+    return v === '12h' || v === '24h' ? v : HOUR_FORMAT;
+  } catch {
+    return HOUR_FORMAT;
+  }
+}
 
 export default function App() {
   const [selected, setSelected] = useState<string[]>(DEFAULT_ZONES);
   const [instant, setInstant] = useState(() => new Date());
   const [live, setLive] = useState(true);
   const [utc, setUtc] = useState(() => parts(new Date(), 'UTC'));
+  const [hourFormat, setHourFormat] = useState<HourFormat>(loadHourFormat);
+  const [consentOpen, setConsentOpen] = useState(() => getConsent() === null);
+  const [consentReopened, setConsentReopened] = useState(false);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(HOUR_FORMAT_KEY, hourFormat);
+    } catch {
+      /* storage unavailable (private mode): keep the in-memory choice */
+    }
+  }, [hourFormat]);
 
   useEffect(() => {
     const t = setInterval(() => {
@@ -112,8 +138,20 @@ export default function App() {
             }}
           />
           <div className="sv">
-            {anchor && ap ? `${ap.hour}:${ap.minute} ${zoneAbbr(instant, anchor.tz)}` : '—'}
+            {anchor && ap ? `${clockLabel(ap, hourFormat)} ${zoneAbbr(instant, anchor.tz)}` : '—'}
           </div>
+        </div>
+
+        <div className="seg">
+          <label className="lbl" htmlFor="hourfmt">Time format</label>
+          <select
+            id="hourfmt"
+            value={hourFormat}
+            onChange={(e) => setHourFormat(e.target.value as HourFormat)}
+          >
+            <option value="12h">12-hour (AM/PM)</option>
+            <option value="24h">24-hour</option>
+          </select>
         </div>
 
         <button onClick={() => { setLive(true); setInstant(new Date()); }}>Now</button>
@@ -137,6 +175,7 @@ export default function App() {
               city={byId[id]}
               instant={instant}
               anchorOffset={anchorOffset}
+              hourFormat={hourFormat}
               isAnchor={i === 0}
               dragging={dragId === id}
               onRemove={() => toggle(id)}
@@ -154,7 +193,23 @@ export default function App() {
         <a href="https://www.overstacked.dev/" target="_blank" rel="noopener noreferrer">
           OverStacked
         </a>
+        <span className="sep">·</span>
+        <a href="/privacy.html">Privacy</a>
+        <span className="sep">·</span>
+        <button
+          type="button"
+          className="linkbtn"
+          onClick={() => { setConsentReopened(true); setConsentOpen(true); }}
+        >Cookie settings</button>
       </footer>
+
+      {consentOpen && (
+        <ConsentBanner
+          autoFocus={consentReopened}
+          onAccept={() => { acceptAnalytics(); setConsentOpen(false); }}
+          onDecline={() => { declineAnalytics(); setConsentOpen(false); }}
+        />
+      )}
     </div>
   );
 }
