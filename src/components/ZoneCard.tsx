@@ -52,11 +52,17 @@ export default function ZoneCard({
       <button
         className="grip"
         title={`Drag to reorder ${city.city}`}
+        aria-label={`Drag to reorder ${city.city}`}
         onMouseDown={() => setGrabbed(true)}
         onMouseUp={() => setGrabbed(false)}
         onBlur={() => setGrabbed(false)}
       >⠿</button>
-      <button className="x" title={`Remove ${city.city}`} onClick={onRemove}>×</button>
+      <button
+        className="x"
+        title={`Remove ${city.city}`}
+        aria-label={`Remove ${city.city}`}
+        onClick={onRemove}
+      >×</button>
       <div className="city">{city.city}</div>
       <div className="meta">
         {zoneAbbr(instant, city.tz)} · {offsetLabel(instant, city.tz)} · {city.cc}
